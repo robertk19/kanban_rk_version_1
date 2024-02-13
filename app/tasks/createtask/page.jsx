@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const CreateUser = () => {
+const CreateTask = () => {
   const router = useRouter();
   const taskId = router.query ? router.query.taskId : undefined;
   const [title, setTitle] = useState("");
@@ -98,4 +98,4 @@ const CreateUser = () => {
   );
 };
 
-export default CreateUser;
+export default CreateTask;

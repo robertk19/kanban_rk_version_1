@@ -3,7 +3,7 @@
 import BearerExample from '../pages/BearerExample.jsx';
 import { useState, useEffect } from 'react';
 import Link from "next/link";
-import Button from '@/components/Button.jsx';
+import Button from '@/components/GrafbaseHoldovers/ButtonGrafbase.jsx';
 import Dashboard from '@/components/Dashboard.jsx';
 import { motion } from "framer-motion";
 import { SessionProvider } from "next-auth/react";

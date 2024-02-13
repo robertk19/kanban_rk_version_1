@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import StarsCanvas from "../canvas/Stars";
 
 const LoginPage = () => {
   const [bearer, setBearer] = useState(
@@ -54,7 +55,7 @@ const LoginPage = () => {
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section className="bg-gray-50 dark:bg-gray-900 relative z-0">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"
@@ -109,6 +110,26 @@ const LoginPage = () => {
                   value={password}
                 />
               </div>
+
+              <div className="flex items-start">
+                <div className="flex items-start"></div>
+                <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
+                  Not registered?{" "}
+                  <a
+                    href="/signup"
+                    className="text-blue-700 hover:underline dark:text-blue-500"
+                  >
+                    Create account
+                  </a>
+                </div>
+                <a
+                  href="#"
+                  className="ms-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
+                >
+                  Lost Password?
+                </a>
+              </div>
+
               <button
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
@@ -119,38 +140,9 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+      <StarsCanvas />
     </section>
   );
 };
 
 export default LoginPage;
-
-//   return (
-//     // <RootLayout hideNavFooter={true}>
-//     <>
-//       <h1>Login</h1>
-//       <form onSubmit={tryLogin}>
-//         <input
-//           className="border-2 border-blue-500 text-blue-500"
-//           value={username}
-//           onChange={(e) => setUsername(e.target.value)}
-//         />
-//         <input
-//           className="border-2 border-blue-500 text-blue-500"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//         />
-//         <button type="submit">Login</button>
-//       </form>
-//     </>
-//   );
-// };
-// export default LoginPage;
-
-// import React from "react";
-
-// const page = () => {
-//   return <div>YOU MADE IT DUMBASS</div>;
-// };
-
-// export default page;

@@ -87,6 +87,7 @@ const Navbar = () => {
             "No user logged in, really bad"
           )}
         </h1>
+        <Link href="/create-task">Share Work!</Link>
 
         {/* {session?.user ? (
           <>
