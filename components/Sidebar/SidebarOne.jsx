@@ -24,6 +24,12 @@ import { HomeRepairServiceRounded } from "@mui/icons-material";
 const SidebarOne = () => {
   const router = useRouter();
 
+  const logout = () => {
+    sessionStorage.removeItem("token");
+    // setBearer("");
+    router.push("/login");
+  };
+
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -95,7 +101,9 @@ const SidebarOne = () => {
       <List>
         {["Logout"].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={logout}>
+              {" "}
+              {/* Add this */}
               <ListItemIcon>
                 {index === 0 ? <InboxIcon /> : <HomeIcon />}
               </ListItemIcon>

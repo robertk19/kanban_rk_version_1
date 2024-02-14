@@ -199,6 +199,10 @@ body:has(.card[data-color="green"]:hover) {
     @apply bg-gradient-to-r from-[#0099ff] to-[#bb00ff] bg-clip-text text-transparent;
   }
 
+  .orange-gradient_text {
+    @apply bg-gradient-to-r from-[#0099ff] to-[#ff6a00] bg-clip-text text-transparent;
+  }
+
   .input {
     @apply bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-2.5 font-normal shadow-card;
   }

@@ -15,6 +15,7 @@ const Dashboard = () => {
   // State to hold the username
   const [username, setUsername] = useState("");
   const bearerToken = sessionStorage.getItem("token");
+  const userId = sessionStorage.getItem("userid");
 
   // Check if user is logged in by if the bearer token is empty or not.
   useEffect(() => {
@@ -22,6 +23,7 @@ const Dashboard = () => {
       router.push("/login"); // Go to login page if user is not logged in (bearer token empty)
     } else {
       console.log(bearerToken);
+      console.log("The user ID is: " + userId);
     }
   }, []);
 
@@ -41,8 +43,9 @@ const Dashboard = () => {
         .then((response) => {
           const username = response.data;
           setUsername(username);
+          // getUserId(username, bearerToken);
           sessionStorage.setItem("username", username);
-          console.log(username);
+          console.log(userId);
         });
     }
   }, [bearerToken]);

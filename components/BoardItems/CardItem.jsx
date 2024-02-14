@@ -3,8 +3,6 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { BsThreeDots } from "react-icons/bs";
 import Image from "next/image";
-// import Message from "../svg/message.svg";
-// import Files from "../svg/files.svg";
 
 function CardItem({ data, index }) {
   return (

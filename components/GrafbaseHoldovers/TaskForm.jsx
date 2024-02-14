@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import FormField from "./FormField";
-import { categoryFilters } from "@/constants";
+import { laneFilters, priorityFilters } from "@/constants";
 import CustomMenu from "./CustomMenu";
 import Button from "./OldButton";
 import { useRouter } from "next/navigation";
@@ -21,15 +21,15 @@ const ProjectForm = ({ type, session, project }) => {
 
     try {
       if (type === "create") {
-        await createNewProject(form, session?.user?.id, token);
+        await createNewProject(form, token);
 
-        router.push("/");
+        router.push("/board");
       }
 
       if (type === "edit") {
         await updateProject(form, project?.id, token);
 
-        router.push("/");
+        router.push("/board");
       }
     } catch (error) {
       console.log(error);
@@ -39,60 +39,28 @@ const ProjectForm = ({ type, session, project }) => {
   };
 
   const createNewProject = async (form, creatorId, token) => {
-    const imageUrl = await uploadImage(form.image);
+    // Prepare the data for the new task
+    const taskData = {
+      title: form.title,
+      description: form.description,
+      lane: 1, // Set the lane. You might want to replace this with a dynamic value.
+      priority: 2, // Set the priority. You might want to replace this with a dynamic value.
+      user: {
+        user_id: 1,
+      },
+    };
 
-    if (imageUrl.url) {
-      const variables = {
-        input: {
-          ...form,
-          image: imageUrl.url,
-          createdBy: {
-            link: creatorId,
-          },
-        },
-      };
-
-      return axios({
-        url: "YOUR_GRAPHQL_ENDPOINT",
-        method: "post",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        data: {
-          query: createProjectMutation,
-          variables: variables,
-        },
-      });
-    }
+    // Send a POST request to the API endpoint
+    return axios.post("http://localhost:8088/kanban_board/tasks", taskData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
   };
 
   const updateProject = () => {
     return null;
-  };
-
-  const handleChangeImage = (e) => {
-    e.preventDefault();
-
-    const file = e.target.files?.[0];
-
-    if (!file) return;
-
-    if (!file.type.includes("image")) {
-      alert("Please upload an image file");
-
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-
-    reader.onload = () => {
-      const result = reader.result;
-
-      handleStateChange("image", result);
-    };
   };
 
   const handleStateChange = (fieldname, value) => {
@@ -103,35 +71,13 @@ const ProjectForm = ({ type, session, project }) => {
   const [form, setform] = useState({
     title: project?.title || "",
     description: project?.description || "",
-    image: project?.image || "",
-    liveSiteUrl: project?.liveSiteUrl || "",
-    githubUrl: project?.githubUrl || "",
-    category: project?.category || "",
+    lane: 1, // Initialize the lane field
+    priority: 2, // Initialize the priority field
   });
 
   return (
     <form onSubmit={handleFormSubmit} className="flexStart form">
-      <div className="flexStart form_image-container">
-        <label htmlFor="poster" className="flexCenter form_image-label">
-          {!form.image && "Choose a poster for your project"}
-        </label>
-        <input
-          id="image"
-          type="file"
-          accept="image/*"
-          required={type === "create"}
-          className="form_image-input"
-          onChange={handleChangeImage}
-        />
-        {form.image && (
-          <Image
-            src={form?.image}
-            className="sm:p-10 object-contain z-20"
-            alt="Project Poster"
-            fill
-          />
-        )}
-      </div>
+      <div className="flexStart form_image-container">Where the image was</div>
 
       <FormField
         title="Title"
@@ -147,27 +93,17 @@ const ProjectForm = ({ type, session, project }) => {
         setState={(value) => handleStateChange("description", value)}
       />
 
-      <FormField
-        type="url"
-        title="Website URL"
-        state={form.liveSiteUrl}
-        placeholder="http://localhost:3000"
-        setState={(value) => handleStateChange("liveSiteUrl", value)}
-      />
-
-      <FormField
-        type="url"
-        title="GitHub URL"
-        state={form.githubUrl}
-        placeholder="https://github.com/robertk19"
-        setState={(value) => handleStateChange("githubUrl", value)}
-      />
-
       <CustomMenu
-        title="Category"
-        state={form.category}
-        filters={categoryFilters}
-        setState={(value) => handleStateChange("category", value)}
+        title="Lane"
+        state={form.lane}
+        filters={laneFilters}
+        setState={(value) => handleStateChange("lane", value)}
+      />
+      <CustomMenu
+        title="priority"
+        state={form.priority}
+        filters={priorityFilters}
+        setState={(value) => handleStateChange("priority", value)}
       />
 
       <div className="flexStart w-full ">

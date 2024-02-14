@@ -16,7 +16,7 @@ const SignUp = () => {
   const router = useRouter();
 
   const createUser = (e) => {
-    const theme = { theme: 1 }; // Alway set to theme 1, themes were scraped I'm dying as it is
+    const theme = 1; // Alway set to theme 1, themes were scraped I'm dying as
     e.preventDefault();
 
     // Check if passwords match
@@ -33,6 +33,7 @@ const SignUp = () => {
     };
 
     const endpoint = "http://localhost:8088/kanban_board/users";
+    console.log(user);
     axios
       .post(endpoint, user)
       .then((response) => router.push("/login")) // Use router.push for navigation

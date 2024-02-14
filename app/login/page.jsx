@@ -48,10 +48,27 @@ const LoginPage = () => {
         )
         .then((response) => {
           const username = response.data;
+          getUserId(username, token);
           sessionStorage.setItem("username", username);
-          console.log(username);
         });
     }
+  };
+
+  const getUserId = (username, token) => {
+    const requestOptions = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    axios
+      .get(
+        `http://localhost:8088/kanban_board/users/username/${username}`,
+        requestOptions
+      )
+      .then((response) => {
+        const userid = response.data;
+        sessionStorage.setItem("userid", userid);
+      });
   };
 
   return (
