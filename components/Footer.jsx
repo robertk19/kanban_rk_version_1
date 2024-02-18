@@ -22,10 +22,10 @@ const Footer = () => {
       <div className="flex flex-col gap-12 w-full">
         <div className="flex items-start flex-col">
           <p className="text-start text-sm font-normal mt-5 max-w-xs">
-            This website functions not only as a showcase for my own personal
-            work, but also as a showcase of my ability to create and develop
-            full-stack applications with relevant uses for real world
-            applications.
+            This website functions as a showcase for me testing the various
+            interact ui elements I have learned in the past: from the basics of
+            drag and drop, to 3D options and utilising the framer-motion
+            library, It acts as a sort of catalogue of stuff I have learnt
           </p>
         </div>
         <div className="flex flex-wrap gap-12">

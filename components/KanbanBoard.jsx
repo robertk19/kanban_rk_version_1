@@ -1,16 +1,6 @@
 "use client";
 import axios from "axios";
-import {
-  Dialog,
-  DialogContent,
-  TextField,
-  DialogActions,
-  Button,
-  Select,
-  MenuItem,
-  InputLabel,
-  Divider,
-} from "@mui/material"; // For modal stuff :)
+import { Divider, Snackbar, Alert } from "@mui/material"; // For modal stuff :)
 import React, { useEffect, useState } from "react";
 
 import Image from "next/image";
@@ -20,15 +10,13 @@ import { StrictModeDroppable } from "@/utils/StrictModeDroppable"; // Custom uti
 import CardItem from "@/components/BoardItems/CardItem";
 import { motion } from "framer-motion";
 import TaskModal from "./BoardItems/TaskModal";
-import Link from "next/link";
-// import Addsquare1 from "/addsquare1.svg";
+import { useRouter } from "next/navigation";
 
 const KanbanBoard = () => {
+  const router = useRouter();
   const [ready, setReady] = useState(false);
   const [boardData, setBoardData] = useState(BoardData);
-  const bearerToken = sessionStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const userId = sessionStorage.getItem("userid");
 
   // The const needed in order to submit a new task from this screen
   const [title, setTitle] = useState("");
@@ -36,7 +24,13 @@ const KanbanBoard = () => {
   const [lane, setLane] = useState(1);
   const [priority, setPriority] = useState(0);
 
-  const laneNames = ["To Do", "Doing", "Done"]; // Add more names as needed
+  let bearerToken = sessionStorage.getItem("token"); // Token and username are set twice. Inefficient however
+  let userId = sessionStorage.getItem("userid"); // Ran out of time trying to have it only be set once. Both happen at different stages of page loading
+
+  const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
+  const [openDeleteSnackbar, setOpenDeleteSnackbar] = useState(false);
+
+  const laneNames = ["To Do", "Doing", "Done"]; // Reference names for the lanes to render them out correctly
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -44,21 +38,18 @@ const KanbanBoard = () => {
     }
   }, []);
 
-  // Fetching all the data from the Rest API of our application
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    bearerToken = sessionStorage.getItem("token");
+    userId = sessionStorage.getItem("userid");
 
-  // Check if user is logged in by if the bearer token is empty or not.
-  useEffect(() => {
     if (!bearerToken) {
       router.push("/login"); // Go to login page if user is not logged in (bearer token empty)
-    } else {
-      console.log(bearerToken);
+    } else if (bearerToken && userId) {
+      fetchTasks(bearerToken, userId);
     }
   }, []);
 
-  const fetchTasks = async () => {
+  const fetchTasks = async (bearerToken, userId) => {
     try {
       const requestOptions = {
         headers: {
@@ -96,6 +87,7 @@ const KanbanBoard = () => {
           title: task.title,
           desc: task.description,
           priority: task.priority, // Include the priority field
+          lane: task.lane, // Include the lane field
         });
       }
     });
@@ -133,7 +125,7 @@ const KanbanBoard = () => {
       lane: parseInt(re.destination.droppableId) + 1, // Lanes are 1-indexed
       priority: dragItem.priority, // Include the priority field
       user: {
-        user_id: 1, // Assuming dragItem has a user_id property
+        user_id: userId, // DragItem has a user_id property
       },
     };
 
@@ -150,53 +142,10 @@ const KanbanBoard = () => {
     }
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
-    // Get form data
-
-    // Add more fields as necessary
-
-    // Create new task
-    const newTask = {
-      title,
-      description,
-      lane, // Set the lane. You might want to replace this with a dynamic value.
-      priority,
-      user: {
-        user_id: userId, // Grabs from userId in the session
-      },
-    };
-
-    try {
-      // Send a POST request to the API endpoint
-      const requestOptions = {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-          "Content-Type": "application/json",
-        },
-      };
-      await axios.post(
-        "http://localhost:8088/kanban_board/tasks",
-        newTask,
-        requestOptions
-      );
-
-      // Close the modal
-      setIsModalOpen(false);
-
-      // Refresh the tasks in the board
-      // This depends on how you're fetching the tasks. If you're using a function like fetchTasks, you can call it here.
-      fetchTasks();
-    } catch (error) {
-      console.error("Error creating new task: ", error);
-    }
-  };
-
   return (
     <>
       <motion.div
-        className="box p-4 py-16 text-center" // Add these classes
+        className="box p-4 py-16 text-center"
         initial={{ x: "-100%" }} // start from the left
         animate={{ x: 0 }} // animate to its original position
         transition={{ type: "spring", stiffness: 60, damping: 20 }} // adjust transition as needed
@@ -267,18 +216,6 @@ const KanbanBoard = () => {
                                 />
                               </button>
                             ) : null}
-
-                            {/* {board.name === "To Do" ? (   // Old way of doing this, opens create-task dialog
-                            <Link href="/create-task">
-                              <Image
-                                className="hover:brightness-75"
-                                src="/addsquare1.svg"
-                                alt="attach"
-                                width={20}    
-                                height={20}
-                              />
-                            </Link>
-                          ) : null} */}
                           </div>
                           <p
                             className={`${
@@ -303,6 +240,14 @@ const KanbanBoard = () => {
                                   index={iIndex}
                                   className="m-3"
                                   priority={item.priority} // Pass the priority field
+                                  lane={item.lane} // Pass the lane field
+                                  bearerToken={bearerToken} // Pass the bearerToken
+                                  fetchTasks={fetchTasks} // Pass the fetchTasks function
+                                  userId={userId} // Pass the userId
+                                  setOpenSuccessSnackbar={
+                                    setOpenSuccessSnackbar
+                                  } // Pass setOpenSnackbar as a prop
+                                  setOpenDeleteSnackbar={setOpenDeleteSnackbar} // Pass setOpenSnackbar as a prop
                                 />
                               ))}
                             {provided.placeholder}
@@ -325,6 +270,34 @@ const KanbanBoard = () => {
         bearerToken={bearerToken}
         userId={userId}
       />
+
+      <Snackbar
+        open={openSuccessSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSuccessSnackbar(false)}
+      >
+        <Alert
+          onClose={() => setOpenSuccessSnackbar(false)}
+          severity="success"
+          sx={{ fontSize: "1.2em" }}
+        >
+          Task Sucessfully Updated!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={openDeleteSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenDeleteSnackbar(false)}
+      >
+        <Alert
+          onClose={() => setOpenDeleteSnackbar(false)}
+          severity="error"
+          sx={{ fontSize: "1.2em" }}
+        >
+          Task Successfully Deleted!
+        </Alert>
+      </Snackbar>
     </>
   );
 };

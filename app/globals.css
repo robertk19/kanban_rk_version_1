@@ -29,9 +29,15 @@ body {
   font-family: "Work Sans", sans-serif;
 }
 
-/* body {
-  font-family: Inter;
-} */
+.draggable {
+  top: auto !important;
+  left: auto !important;
+}
+
+nextjs-portal {
+  display: none;
+}
+
 
 body:has(.card[data-color="blue"]:hover) {
   background-color: rgb(var(--blue-rgb) / 25%);
@@ -86,16 +92,6 @@ body:has(.card[data-color="green"]:hover) {
 
 .user-info {
   @apply flex flex-wrap whitespace-nowrap text-sm font-normal gap-2 w-full;
-}
-
-/* Home */
-.projects-grid {
-  @apply grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10 mt-10 w-full;
-}
-
-/* Project Actions */
-.edit-action_btn {
-  @apply p-3 text-gray-100 bg-light-white-400 rounded-lg text-sm font-medium;
 }
 
 
@@ -219,9 +215,6 @@ body:has(.card[data-color="green"]:hover) {
     @apply flex justify-between items-center sm:px-16 px-8 py-4 max-w-5xl mx-auto absolute top-0 bg-transparent z-10 right-0 left-0;
   }
 
-  .footer {
-    @apply max-w-5xl mx-auto sm:px-16 pb-6 px-8 flex flex-col gap-7;
-  }
 
   .footer-container {
     @apply flex flex-wrap gap-7 items-center justify-between;
@@ -501,20 +494,31 @@ span.flatpickr-weekday,
   @apply line-through;
 }
 
-.custom-input-date::-webkit-calendar-picker-indicator {
-  background: transparent;
+.green-pink-gradient {
+  background: "#00cea8";
+  background: linear-gradient(90.13deg, #0099ff 1.9%, #bb00ff 97.5%);
+  background: -webkit-linear-gradient(-90.13deg, #fcfeff 2%, #00c3ff 97.5%);
 }
 
-input[type="search"]::-webkit-search-cancel-button {
-  @apply appearance-none;
+/*Custom Shadow Menu */
+.shadow-menu {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.custom-input-date::-webkit-calendar-picker-indicator {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 20px;
+/* Profile Menu */
+.profile_menu-items {
+  @apply flex-col absolute pr-32 right-1/2 translate-x-1/2 mt-3 p-7 min-w-max rounded-xl bg-white border border-nav-border shadow-menu;
 }
 
-[x-cloak] {
-  display: none !important;
+/* Profile Card */
+.profile_card-title {
+  @apply justify-end items-end w-full h-1/3 bg-gradient-to-b from-transparent to-black/50 rounded-b-2xl gap-2 absolute bottom-0 right-0 font-semibold text-lg text-white p-4;
 }
+
+
+
+
+
+
+
+

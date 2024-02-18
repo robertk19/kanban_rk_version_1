@@ -11,12 +11,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import Link from "next/link";
 import Image from "next/image";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
+import ListIcon from "@mui/icons-material/List";
 
 import { useRouter } from "next/navigation";
 import { HomeRepairServiceRounded } from "@mui/icons-material";
@@ -68,34 +69,32 @@ const SidebarOne = () => {
         </Link>
       </div>
       <List>
-        {["Home", "User List", "Task List", "Kanban Board"].map(
-          (text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton
-                onClick={() => {
-                  if (text === "Home") {
-                    router.push("/");
-                  } else if (text === "Task List") {
-                    router.push("/tasklist");
-                  } else if (text === "User List") {
-                    router.push("/userlist");
-                  } else if (text === "Kanban Board") {
-                    router.push("/board");
-                  }
-                }}
-              >
-                <ListItemIcon>
-                  {index === 0 ? (
-                    <HomeIcon fontSize="large" />
-                  ) : index === 1 ? (
-                    <MailIcon />
-                  ) : null}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          )
-        )}
+        {["Home", "Kanban Board", "Task List"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton
+              onClick={() => {
+                if (text === "Home") {
+                  router.push("/");
+                } else if (text === "Task List") {
+                  router.push("/tasklist");
+                } else if (text === "Kanban Board") {
+                  router.push("/board");
+                }
+              }}
+            >
+              <ListItemIcon>
+                {index === 0 ? (
+                  <HomeIcon fontSize="large" />
+                ) : index === 1 ? (
+                  <ViewColumnIcon fontSize="large" />
+                ) : index === 2 ? (
+                  <ListIcon fontSize="large" />
+                ) : null}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
       <Divider />
       <List>
@@ -103,7 +102,6 @@ const SidebarOne = () => {
           <ListItem key={text} disablePadding>
             <ListItemButton onClick={logout}>
               {" "}
-              {/* Add this */}
               <ListItemIcon>
                 {index === 0 ? <InboxIcon /> : <HomeIcon />}
               </ListItemIcon>

@@ -13,16 +13,19 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
   const router = useRouter();
 
   const createUser = (e) => {
-    const theme = 1; // Alway set to theme 1, themes were scraped I'm dying as
+    const theme = 1; // Always set to theme 1, themes got the boot I'm dying as is
     e.preventDefault();
 
     // Check if passwords match
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      setPasswordsMatch(false);
       return;
+    } else {
+      setPasswordsMatch(true);
     }
 
     const user = {
@@ -36,7 +39,7 @@ const SignUp = () => {
     console.log(user);
     axios
       .post(endpoint, user)
-      .then((response) => router.push("/login")) // Use router.push for navigation
+      .then((response) => router.push("/login?userCreated=true")) // Use router.push for navigation
       .catch((error) => {
         // Handle error
         console.error("There was an error!", error);
@@ -46,7 +49,7 @@ const SignUp = () => {
   return (
     <div
       className={` flex xl:flex-row flex-col-reverse gap-10 overflow-hidden bg-gray-900 z-0 relative`}
-      style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }} // Add this line
+      style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
     >
       <motion.div
         className="flex-[0.75] p-8 rounded-2xl"
@@ -86,7 +89,9 @@ const SignUp = () => {
                       id="username"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Your Username"
-                      required=""
+                      required
+                      pattern=".{3,}" // username needs to be above 3 characters
+                      title="Username must be at least 3 characters"
                       onChange={(e) => setUsername(e.target.value)}
                       value={username}
                     />
@@ -104,7 +109,9 @@ const SignUp = () => {
                       id="email"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Example@gmail.com"
-                      required=""
+                      required
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" // email must have @
+                      title="Please enter a valid email address, typically with @ and a domain"
                       onChange={(e) => setEmail(e.target.value)}
                       value={email}
                     />
@@ -122,7 +129,9 @@ const SignUp = () => {
                       id="password"
                       placeholder="••••••••"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required=""
+                      required
+                      pattern=".{6,}" // password needs to be above 6 characters
+                      title="Password must be at least 6 characters"
                       onChange={(e) => setPassword(e.target.value)}
                       value={password}
                     />
@@ -141,10 +150,16 @@ const SignUp = () => {
                       id="confirmPassword"
                       placeholder="••••••••"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required=""
+                      pattern=".{6,}" // confirmPassword needs to be above 6 characters
+                      title="Confirm Password must be at least 6 characters"
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       value={confirmPassword}
                     />
+                    {!passwordsMatch && (
+                      <div className=" text-red text-sm pt-3">
+                        Passwords do not match!
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex items-start pt-5">

@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import StarsCanvas from "../canvas/Stars";
 
@@ -11,7 +11,10 @@ const LoginPage = () => {
   );
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [userCreated, setUserCreated] = useState(false);
+
   const router = useRouter();
+
   const tryLogin = (e) => {
     e.preventDefault();
     const attempt = { username, password };
@@ -54,7 +57,14 @@ const LoginPage = () => {
     }
   };
 
+  // First of the ATTEMPTED places to set userId, never fully discovered why this only set it conditionally. Second place set is in dashboard.
   const getUserId = (username, token) => {
+    console.log(
+      "getUserId called with username:",
+      username,
+      "and token:",
+      token
+    );
     const requestOptions = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -66,6 +76,7 @@ const LoginPage = () => {
         requestOptions
       )
       .then((response) => {
+        console.log("Response from server:", response);
         const userid = response.data;
         sessionStorage.setItem("userid", userid);
       });
@@ -126,6 +137,11 @@ const LoginPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
                 />
+                {/* {userCreated && (
+                  <div className="text-white text-sm pt-4">
+                    User has been successfully created!         THIS DID NOT
+                  </div>
+                )} */}
               </div>
 
               <div className="flex items-start">

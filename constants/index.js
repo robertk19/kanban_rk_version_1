@@ -2,24 +2,35 @@ export const NavLinks = [
     { href: '/', key: 'Home', text: 'Home' },
     { href: '/board', key: 'Kanban Board', text: 'Kanban Board' },
     { href: '/tasklist', key: 'Task List', text: 'Task List' },
-    { href: '/userlist', key: 'User List', text: 'User List' },
   ];
   
-  // export const categoryFilters = [
-  //   "Frontend",
-  //   "Backend",
-  //   "Full-Stack",
-  //   "Mobile",
-  //   "UI/UX",
-  //   "Game Dev",
-  //   "DevOps",
-  //   "Data Science",
-  //   "Machine Learning",
-  //   "Cybersecurity",
-  //   "Blockchain",
-  //   "E-commerce",
-  //   "Chatbots"
-  // ]
+export const skills = [
+  { name: 'CSS', imageUrl: '/icons/css.svg' },
+  { name: 'Git', imageUrl: '/icons/git.svg' },
+  { name: 'HTML', imageUrl: '/icons/html.svg' },
+  { name: 'Javascript', imageUrl: '/icons/javascript.svg' },
+  { name: 'Motion', imageUrl: '/icons/motion.svg' },
+  { name: 'Material-UI', imageUrl: '/icons/mui.svg' },
+  { name: 'Next.JS', imageUrl: '/icons/nextjs.svg' },
+  { name: 'NodeJS', imageUrl: '/icons/nodejs.svg' },
+  { name: 'React', imageUrl: '/icons/react.svg' },
+  { name: 'Tailwind CSS', imageUrl: '/icons/tailwindcss.svg' }
+];
+
+export const services = [
+  {
+    title: "Home",
+    icon: "/web.png",
+  },
+  {
+    title: "Kanban Board",
+    icon: "/mobile.png",
+  },
+  {
+    title: "Task List",
+    icon: "/backend.png",
+  },
+];
 
   export const laneFilters = [
     "To Do",
@@ -37,29 +48,27 @@ export const NavLinks = [
   
   export const footerLinks = [
     {
-      title: 'For developers',
+      title: 'Getting around',
       links: [
-        'Go Pro!',
-        'Explore development work',
+        'Home!',
+        'Kanban Board',
+        'Task List',
+        'User List',
         'Development blog',
-        'Code podcast',
-        'Open-source projects',
-        'Refer a Friend',
-        'Code of conduct',
       ],
     },
     {
-      title: 'Hire developers',
+      title: 'Find more about us',
       links: [
-        'Post a job opening',
-        'Post a freelance project',
-        'Search for developers',
+        'About Us',
+        'Contact Us',
+        'Further Information',
       ],
     },
     {
-      title: 'Brands',
+      title: 'GitHub',
       links: [
-        'Advertise with us',
+        'GitHub Repo',
       ],
     },
     {
@@ -79,7 +88,7 @@ export const NavLinks = [
     {
       title: 'Directories',
       links: [
-        'Development jobs',
+        'Carrer Opportunities',
         'Developers for hire',
         'Freelance developers for hire',
         'Tags',
